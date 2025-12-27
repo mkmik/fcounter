@@ -1,0 +1,56 @@
+# Pin Constraint File (PCF) for ice40-up5k FPGA
+# This file maps logical signals to physical FPGA pins
+#
+# Board: iCEBreaker (default)
+# Adjust pin numbers for your specific board:
+#   - iCEBreaker: Use pins as shown below
+#   - UPduino v3: CLK=20, LED=41, BTN=25 (or use GPIO)
+#   - iCEstick: CLK=21, LED=99, BTN=78
+
+# ====================
+# Clock Input (12 MHz)
+# ====================
+# Most ice40-up5k boards have a 12MHz oscillator
+set_io clk 35  # iCEBreaker 12MHz clock
+
+# ====================
+# Reset Button
+# ====================
+# Active high reset button
+# Note: You may need to add external pull-up/pull-down depending on your board
+set_io reset 10  # iCEBreaker BTN1 (or use BTN2: pin 19, BTN3: pin 20)
+
+# ====================
+# LED Output
+# ====================
+# LED driven by bit 9 of the counter
+set_io led 11  # iCEBreaker LED1 (LEDR_N)
+# Other iCEBreaker LEDs available:
+#   LED2 (LEDG_N): pin 37
+#   LED3: pin 26
+#   LED4: pin 27
+#   LED5: pin 25
+
+# ====================
+# Alternative Pin Assignments
+# ====================
+# Uncomment and modify for your board:
+
+# UPduino v3.0/3.1:
+# set_io clk 20
+# set_io reset 25
+# set_io led 41
+
+# iCEstick:
+# set_io clk 21
+# set_io reset 78
+# set_io led 99
+
+# ====================
+# Notes for Beginners
+# ====================
+# 1. Pin numbers refer to physical FPGA package pins, not board headers
+# 2. Consult your board's schematic/pinout diagram
+# 3. Some LEDs may be active-low (invert in Verilog if needed)
+# 4. Buttons may need debouncing for complex designs (not needed here)
+# 5. Always verify your board's voltage levels (ice40-up5k is 3.3V)
