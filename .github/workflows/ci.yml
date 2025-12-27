@@ -1,0 +1,90 @@
+name: FPGA CI
+
+on:
+  push:
+    branches: [ main, master, 'claude/**' ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  # Simulation job - runs testbenches
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Icarus Verilog
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y iverilog
+
+    - name: Run simulation
+      run: make sim
+
+    - name: Upload waveform artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: simulation-waveforms
+        path: build/*.vcd
+        retention-days: 30
+
+  # Synthesis job - builds FPGA bitstream
+  synthesis:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install OSS CAD Suite
+      run: |
+        # Install OSS CAD Suite (includes yosys, nextpnr, icestorm)
+        wget -q https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2024-12-01/oss-cad-suite-linux-x64-20241201.tgz
+        tar -xzf oss-cad-suite-linux-x64-20241201.tgz
+        echo "$GITHUB_WORKSPACE/oss-cad-suite/bin" >> $GITHUB_PATH
+
+    - name: Synthesize design
+      run: make synth
+
+    - name: Place and Route
+      run: make pnr
+
+    - name: Generate bitstream
+      run: make bitstream
+
+    - name: Timing analysis
+      run: make timing
+
+    - name: Resource utilization
+      run: make stats
+
+    - name: Upload bitstream
+      uses: actions/upload-artifact@v4
+      with:
+        name: fpga-bitstream
+        path: build/*.bin
+        retention-days: 90
+
+    - name: Upload timing report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: timing-report
+        path: build/timing.rpt
+        retention-days: 30
+
+  # Lint job (optional) - checks code style
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Verilator
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y verilator
+
+    - name: Lint Verilog code
+      run: verilator --lint-only -Wall src/*.v

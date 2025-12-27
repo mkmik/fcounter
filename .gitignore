@@ -1,0 +1,35 @@
+# Build artifacts
+build/
+*.vvp
+*.vcd
+*.json
+*.asc
+*.bin
+*.rpt
+
+# Waveform files
+*.fst
+*.ghw
+
+# Temporary files
+*.log
+*.tmp
+*~
+.*.swp
+.DS_Store
+
+# OSS CAD Suite
+oss-cad-suite/
+*.tgz
+
+# Editor files
+.vscode/
+.idea/
+*.sublime-*
+
+# Python (if using cocotb or other Python tools)
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
