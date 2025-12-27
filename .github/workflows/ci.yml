@@ -42,31 +42,22 @@ jobs:
         # Install OSS CAD Suite (includes yosys, nextpnr, icestorm)
         wget -q https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2024-12-01/oss-cad-suite-linux-x64-20241201.tgz
         tar -xzf oss-cad-suite-linux-x64-20241201.tgz
+        echo "$GITHUB_WORKSPACE/oss-cad-suite/bin" >> $GITHUB_PATH
 
     - name: Synthesize design
-      run: |
-        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
-        make synth
+      run: make synth
 
     - name: Place and Route
-      run: |
-        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
-        make pnr
+      run: make pnr
 
     - name: Generate bitstream
-      run: |
-        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
-        make bitstream
+      run: make bitstream
 
     - name: Timing analysis
-      run: |
-        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
-        make timing
+      run: make timing
 
     - name: Resource utilization
-      run: |
-        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
-        make stats
+      run: make stats
 
     - name: Upload bitstream
       uses: actions/upload-artifact@v4
@@ -96,6 +87,4 @@ jobs:
         sudo apt-get install -y verilator
 
     - name: Lint Verilog code
-      run: |
-        verilator --lint-only -Wall src/*.v || true
-        echo "Note: Linting warnings are informational only"
+      run: verilator --lint-only -Wall src/*.v

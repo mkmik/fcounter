@@ -5,7 +5,9 @@
 # Adjust pin numbers for your specific board:
 #   - iCEBreaker: Use pins as shown below
 #   - UPduino v3: CLK=20, LED=41, BTN=25 (or use GPIO)
-#   - iCEstick: CLK=21, LED=99, BTN=78
+#
+# NOTE: iCEstick uses ice40-hx1k, NOT ice40-up5k, so it requires
+# a completely different project configuration and is not compatible.
 
 # ====================
 # Clock Input (12 MHz)
@@ -40,11 +42,6 @@ set_io led 11  # iCEBreaker LED1 (LEDR_N)
 # set_io clk 20
 # set_io reset 25
 # set_io led 41
-
-# iCEstick:
-# set_io clk 21
-# set_io reset 78
-# set_io led 99
 
 # ====================
 # Notes for Beginners

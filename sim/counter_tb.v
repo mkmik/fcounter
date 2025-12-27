@@ -61,7 +61,8 @@ module counter_tb;
         $display("PASS: Counter incrementing");
 
         // Test 3: Run until bit 9 toggles (512 cycles minimum)
-        #600;
+        // Need 512+ cycles at 10ns period = 5120+ ns
+        #5200;
 
         // Test 4: Verify LED toggles with bit 9
         if (led != dut.count[9]) begin

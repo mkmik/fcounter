@@ -113,7 +113,8 @@ This project targets the **Lattice ice40-up5k** FPGA. Compatible boards include:
 
 - **iCEBreaker** - Default pin configuration
 - **UPduino v3** - Uncomment alternative pins in PCF
-- **iCEstick** - Uncomment alternative pins in PCF
+
+**Note:** iCEstick uses the ice40-hx1k FPGA (not ice40-up5k), so it requires different FPGA target settings in the Makefile (`DEVICE = hx1k`, `PACKAGE = tq144`) and different pin constraints. It is not directly compatible with this project configuration.
 
 ### Pin Configuration
 
@@ -218,7 +219,7 @@ A: Make sure iverilog is installed: `iverilog -v`
 A: Check that all tools are in PATH. Use OSS CAD Suite for easiest setup.
 
 **Q: How do I make the LED blink visibly?**
-A: Change `assign led = count[9];` to `assign led = count[23];` in `src/counter.v`. This will blink at ~1.4 Hz.
+A: Change `assign led = count[9];` to `assign led = count[22];` in `src/counter.v`. This will blink at ~1.4 Hz (bit 22 toggles every ~0.7 seconds).
 
 **Q: Can I use a different FPGA?**
 A: The Verilog is portable, but you'll need different tools and constraints for non-ice40 FPGAs (Xilinx, Altera, etc.)
