@@ -67,9 +67,13 @@ $(BUILD_DIR)/$(PROJECT)_tb.vvp: $(RTL_SRC) $(TB_SRC) | $(BUILD_DIR)
 
 # Waveform viewer
 .PHONY: wave
-wave: $(BUILD_DIR)/$(PROJECT)_tb.vcd
+wave:
+	@if [ ! -f $(BUILD_DIR)/$(PROJECT)_tb.vcd ]; then \
+		echo "=== No waveform file found, running simulation first ==="; \
+		$(MAKE) sim; \
+	fi
 	@echo "=== Opening waveform viewer ==="
-	$(GTKWAVE) $< &
+	$(GTKWAVE) $(BUILD_DIR)/$(PROJECT)_tb.vcd &
 
 # Synthesis with yosys
 .PHONY: synth
@@ -128,6 +132,3 @@ $(BUILD_DIR):
 # Phony targets for CI/CD
 .PHONY: test
 test: sim
-
-.PHONY: build
-build: bitstream

@@ -42,31 +42,30 @@ jobs:
         # Install OSS CAD Suite (includes yosys, nextpnr, icestorm)
         wget -q https://github.com/YosysHQ/oss-cad-suite-build/releases/download/2024-12-01/oss-cad-suite-linux-x64-20241201.tgz
         tar -xzf oss-cad-suite-linux-x64-20241201.tgz
-        echo "${{ github.workspace }}/oss-cad-suite/bin" >> $GITHUB_PATH
 
     - name: Synthesize design
       run: |
-        source oss-cad-suite/environment
+        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
         make synth
 
     - name: Place and Route
       run: |
-        source oss-cad-suite/environment
+        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
         make pnr
 
     - name: Generate bitstream
       run: |
-        source oss-cad-suite/environment
+        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
         make bitstream
 
     - name: Timing analysis
       run: |
-        source oss-cad-suite/environment
+        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
         make timing
 
     - name: Resource utilization
       run: |
-        source oss-cad-suite/environment
+        export PATH="$GITHUB_WORKSPACE/oss-cad-suite/bin:$PATH"
         make stats
 
     - name: Upload bitstream
